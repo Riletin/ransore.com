@@ -1,25 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Updates</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        :root { --discord-title: #ffffff; }
-        body { background-color: #313338; font-family: 'gg sans', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        #updates-container { width: 100%; max-width: 600px; }
-        .update-card { background-color: #2b2d31; border-radius: 4px; padding: 12px 16px; margin-bottom: 15px; border-left: 4px solid #1e1f22; position: relative; }
-        .timestamp { font-size: 0.75rem; color: #949ba4; margin-bottom: 8px; display: block; }
-        .embed-title { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
-        .embed-title a { color: #fff; text-decoration: none; }
-        .embed-title a:hover { text-decoration: underline; }
-        .embed-description { color: #dbdee1; font-size: 0.875rem; line-height: 1.375; }
-        .embed-description a { color: #00a8fc; text-decoration: none; }
-        .embed-description a:hover { text-decoration: underline; }
-        .embed-description p { margin: 0; }
-        .error { color: #f23f42; text-align: center; }
-        .loading { color: #ffffff; text-align: center; margin-top: 50px; }
+		html {
+			scrollbar-width: none; 
+			-ms-overflow-style: none;
+		}
+        body {
+			background-color: #000;
+			font-family: 'gg sans',
+			sans-serif; display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 20px;
+			margin: 0;
+		}
+        #updates-container {
+			width: 100%;
+		}
+        .update-card {
+			background-color: rgba(85,85,85,0.5);
+			border-radius: 4px;
+			padding:12px 16px;
+			margin-bottom: 15px;
+			border-left: 4px solid #1e1f22;
+			position: relative;
+		}
+        .timestamp {
+			font-size: 0.75rem;
+			color: #949ba4;
+			margin-bottom: 8px;
+			display: block;
+		}
+        .embed-title {
+			font-size: 1rem;
+			font-weight: 600;
+			margin: 0 0 8px 0;
+		}
+        .embed-title a {
+			color: #fff;
+			text-decoration: none;
+		}
+        .embed-title a:hover {
+			text-decoration: underline;
+		}
+        .embed-description {
+			color: #dbdee1;
+			font-size: 0.875rem;
+			line-height: 1.375;
+		}
+        .embed-description a {
+			color: #00a8fc;
+			text-decoration: none;
+		}
+        .embed-description a:hover {
+			text-decoration: underline;
+		}
+        .embed-description p {
+			margin: 0;
+		}
+        .error {
+			color: #f23f42;
+			text-align: center;
+		}
+        .loading {
+			color: #ffffff;
+			text-align: center;
+			margin-top: 50px;
+			scrollbar-width: none; 
+			-ms-overflow-style: none;
+		}
     </style>
 </head>
 <body>
