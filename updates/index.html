@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Updates</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root { --discord-title: #ffffff; }
+        body { background-color: #313338; font-family: 'gg sans', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        #updates-container { width: 100%; max-width: 600px; }
+        .update-card { background-color: #2b2d31; border-radius: 4px; padding: 12px 16px; margin-bottom: 15px; border-left: 4px solid #1e1f22; position: relative; }
+        .timestamp { font-size: 0.75rem; color: #949ba4; margin-bottom: 8px; display: block; }
+        .embed-title { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
+        .embed-title a { color: #fff; text-decoration: none; }
+        .embed-title a:hover { text-decoration: underline; }
+        .embed-description { color: #dbdee1; font-size: 0.875rem; line-height: 1.375; }
+        .embed-description a { color: #00a8fc; text-decoration: none; }
+        .embed-description a:hover { text-decoration: underline; }
+        .embed-description p { margin: 0; }
+        .error { color: #f23f42; text-align: center; }
+        .loading { color: #ffffff; text-align: center; margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <div id="updates-container">
+        <div class="loading">Fetching latest updates...</div>
+    </div>
+
+    <script>
+        // Use your full Worker URL here
+        const WORKER_URL = 'https://api.ransore.com/updates'; 
+
+        marked.setOptions({
+            gfm: true,
+            breaks: true
+        });
+
+        async function fetchUpdates() {
+            const container = document.getElementById('updates-container');
+            try {
+                const response = await fetch(WORKER_URL);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const messages = await response.json();
+                container.innerHTML = ''; 
+
+                if (messages.length === 0) {
+                    container.innerHTML = '<div class="loading">No updates found.</div>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    msg.embeds.forEach(embed => {
+                        const card = document.createElement('div');
+                        card.className = 'update-card';
+                        
+                        const date = new Date(msg.timestamp);
+                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                        if (embed.color) {
+                            card.style.borderLeftColor = '#' + embed.color.toString(16).padStart(6, '0');
+                        }
+
+                        // Removed the backslashes from the template literals
+                        const titleHtml = embed.title 
+                            ? (embed.url ? `<h3 class="embed-title"><a href="${embed.url}" target="_blank">${embed.title}</a></h3>` : `<h3 class="embed-title">${embed.title}</h3>`)
+                            : '';
+
+                        const parsedDescription = embed.description ? marked.parse(embed.description) : '';
+
+                        card.innerHTML = `
+                            <span class="timestamp">${formattedDate}</span>
+                            ${titleHtml}
+                            <div class="embed-description">${parsedDescription}</div>
+                        `;
+                        container.appendChild(card);
+                    });
+                });
+            } catch (err) {
+                container.innerHTML = `<div class="error">Error loading updates.</div>`;
+                console.error("Fetch error:", err);
+            }
+        }
+
+        fetchUpdates();
+    </script>
+</body>
+</html>
